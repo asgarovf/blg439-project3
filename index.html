@@ -21,10 +21,12 @@
       align-items: center;
       padding: 0;
       margin: 0;
+      background-color: black;
+      overflow: hidden;
     "
   >
     <canvas
-      style="border-radius: 24px; border-width: 4px; background-color: black"
+      style="border-width: 4px; background-color: black"
       id="mathBirdCanvas"
       width="1024"
       height="768"
@@ -33,7 +35,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         const canvas = document.getElementById("mathBirdCanvas");
         const innerWidth = window.innerWidth;
-        const innerHeight = window.innerHeight;
+        const innerHeight = window.innerHeight - 24;
 
         canvas.setAttribute("width", innerWidth);
         canvas.setAttribute("height", innerHeight);
@@ -62,8 +64,14 @@
         const pipeWidth = 200; // Adjusted pipe width
         const pipeHeight = 120; // Adjusted pipe height
         const pipeGap = 100; // Adjusted pipe gap
-        const pipeSpeed = 7.5;
+        let pipeSpeed = 7.5;
         let pipeCounter = 0;
+
+        function updatePipespeed() {
+          if (score % 5 === 0 && score > 0) {
+            pipeSpeed += 0.5;
+          }
+        }
 
         function getPipeHeightForIndex(index) {
           return (innerHeight / 4) * index + 75;
@@ -109,7 +117,7 @@
         function drawBird() {
           ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
           ctx.fillStyle = "white";
-          ctx.font = "20px Arial";
+          ctx.font = "32px Arial";
           if (mathQuestion != null) {
             ctx.fillText(
               mathQuestion.question,
@@ -129,7 +137,7 @@
           ctx.fillStyle = "green";
           ctx.fillRect(x, height, pipeWidth, pipeHeight);
           ctx.fillStyle = "white";
-          ctx.font = "20px Arial";
+          ctx.font = "64px Arial";
           ctx.fillText(
             option.toString(),
             x + pipeWidth / 2 - 10,
@@ -176,6 +184,7 @@
                   pipes.splice(pipes.indexOf(pipe), 1);
                   score++;
                   setQuestions();
+                  updatePipespeed();
                 } else {
                   askRestartQuestion();
                 }
