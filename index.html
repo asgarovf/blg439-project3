@@ -50,7 +50,7 @@
           y: canvas.height / 2 - 15,
           width: 70,
           height: 45,
-          gravity: 0.5,
+          gravity: 0.75,
           velocity: 5,
           jump: -12,
         };
@@ -59,14 +59,14 @@
         let mathQuestion = null;
 
         let pipes = [];
-        const pipeWidth = 150; // Adjusted pipe width
-        const pipeHeight = 80; // Adjusted pipe height
+        const pipeWidth = 200; // Adjusted pipe width
+        const pipeHeight = 120; // Adjusted pipe height
         const pipeGap = 100; // Adjusted pipe gap
-        const pipeSpeed = 5;
+        const pipeSpeed = 7.5;
         let pipeCounter = 0;
 
         function getPipeHeightForIndex(index) {
-          return (innerHeight / 4) * index + pipeGap;
+          return (innerHeight / 4) * index + 75;
         }
 
         function setQuestions() {
