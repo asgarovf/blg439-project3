@@ -68,8 +68,8 @@
         let pipeCounter = 0;
 
         function updatePipespeed() {
-          if (score % 5 === 0 && score > 0) {
-            pipeSpeed += 0.5;
+          if (score % 3 === 0 && score > 0) {
+            pipeSpeed += 2;
           }
         }
 
@@ -105,7 +105,11 @@
         function generateOptions(correctAnswer) {
           const options = [correctAnswer];
           while (options.length < 4) {
-            const randomOption = Math.floor(Math.random() * 10) + 1;
+            let randomOption = Math.floor(Math.random() * 10) + 1;
+            if (correctAnswer < 0) {
+              randomOption = -randomOption;
+            }
+
             if (!options.includes(randomOption)) {
               options.push(randomOption);
             }
@@ -137,7 +141,7 @@
           ctx.fillStyle = "green";
           ctx.fillRect(x, height, pipeWidth, pipeHeight);
           ctx.fillStyle = "white";
-          ctx.font = "64px Arial";
+          ctx.font = "56px Arial";
           ctx.fillText(
             option.toString(),
             x + pipeWidth / 2 - 10,
@@ -163,8 +167,17 @@
         }
 
         function askRestartQuestion() {
-          alert(`Game over and you scored ${score} points!`);
-          resetGame();
+          const maxScore = localStorage.getItem("max_score") ?? 0;
+          const maxScoreNumber = Number(maxScore);
+          localStorage.setItem("max_score", Math.max(maxScoreNumber, score));
+          if (confirm(`Game over and you scored ${score} points!`)) {
+            resetGame();
+          } else {
+            resetGame();
+            setTimeout(() => {
+              window.location.reload();
+            }, 50);
+          }
         }
 
         function checkCollision() {
@@ -198,6 +211,7 @@
           score = 0;
           bird.velocity = 0;
           pipes.length = 0;
+          pipeSpeed = 7.5;
           pipeCounter = 0;
           setQuestions();
         }
@@ -235,6 +249,13 @@
 
         birdImage.onload = function () {
           ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
+          ctx.fillStyle = "green";
+          ctx.font = "30px Arial";
+          ctx.fillText(
+            "Highest score: " + (localStorage.getItem("max_score") ?? 0),
+            25,
+            30
+          );
           loaded = true;
         };
       });
